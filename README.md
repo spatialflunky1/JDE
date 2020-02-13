@@ -5,4 +5,4 @@ Jake's Development Environment
 An Integrated Development Environment to code Python and others in the future.
 
 ## Version
-Beta 0.2
+Alpha 0.2
