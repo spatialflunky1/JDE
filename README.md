@@ -9,5 +9,8 @@ Alpha 0.2
 
 ## How to Run
 #### Linux & macOS:
-`python window.py`
+In terminal run:
+```
+python window.py
+```
 
