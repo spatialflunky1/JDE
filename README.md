@@ -11,7 +11,7 @@ Alpha 0.0.2
 #### Linux & macOS:
 In terminal run:
 ```
-python window.py
+python main.py
 ```
 #### Note:
 Make sure you are running python 3 with:
