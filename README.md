@@ -13,7 +13,8 @@ In terminal run:
 ```
 python window.py
 ```
-#### Note: Make sure you are running python 3 with:
+#### Note:
+Make sure you are running python 3 with:
 ```
 python --version
 ```
