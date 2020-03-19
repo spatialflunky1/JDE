@@ -5,7 +5,7 @@ Jake's Development Environment
 An Integrated Development Environment to code Python and others in the future.
 
 ### Version:
-Alpha 0.0.2
+Alpha 0.0.3
 
 ## How to Run
 #### Linux & macOS:
@@ -18,5 +18,9 @@ Make sure you are running python 3 with:
 ```
 python --version
 ```
-
-
+Make sure you have Tk installed with(Ubuntu):
+```
+sudo apt update
+sudo apt install tk
+sudo apt install python3-tk
+```
