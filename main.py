@@ -1,30 +1,9 @@
 from tkinter import *
 import time
-class Window(Frame):
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.master = master
-        self.default_speed = 10
-        self.draw()
-    def close_window(self):
-        self.master.destroy()
-    def draw(self):
-        self.master.title("JDE")
-        self.pack(fill=BOTH, expand=1)
-        quitButton = Button(self, text="Exit", command = self.close_window)
-        quitButton.place(x=0, y=0)
-class UIManager():
-    def __init__(self):
-        self.is_fullscreen = False
-        self.is_in_darkmode = False
-        self.current_resolution = (1920,1080)
-        self.maximum_resolution = (3840,2160)
-    def is_fullscreen(self):
-        if self.current_resolution == self.maximum_resolution:
-            return True
-        else:
-            return False
-
+import window
+import uimanager
+ui_manager = uimanager.UIManager(frame = [800,600])
+print(ui_manager.is_fullscreen)
 root = Tk()
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
@@ -38,6 +17,6 @@ textbox.config(yscrollcommand=scrollbar.set)
 textbox.config(xscrollcommand=side_scrollbar.set)
 textbox.insert(END, "Click here to type\n")
 root.geometry("800x600")
-app = Window(root)
+app = window.Window(root)
 app.draw()
 root.mainloop()
