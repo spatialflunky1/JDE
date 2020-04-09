@@ -18,7 +18,7 @@ Make sure you are running python 3 with:
 ```
 python --version
 ```
-Make sure you have Tk installed with:
+#### Make sure you have Tk installed with:
 
 Ubuntu:
 ```
