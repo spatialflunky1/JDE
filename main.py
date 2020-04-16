@@ -1,16 +1,20 @@
 from tkinter import *
+from tkinter.filedialog import asksaveasfile
 import time
 import window
 import uimanager
+def save():
+    files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
+    file = asksaveasfile(filetypes = files, defaultextension = files)
 ui_manager = uimanager.UIManager(frame = [800,600])
-print(ui_manager.is_fullscreen)
+# print(ui_manager.is_fullscreen)
 root = Tk()
 menubar = Menu(root)
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New")
 filemenu.add_command(label="Open")
 filemenu.add_command(label="Save")
-filemenu.add_command(label="Save As...")
+filemenu.add_command(label="Save As...", command=lambda : save())
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
 root.config(menu=menubar)
