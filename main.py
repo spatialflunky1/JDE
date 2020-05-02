@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter.filedialog import asksaveasfile
+import tkinter.filedialog
 import time
 import window
 import uimanager
@@ -8,19 +8,25 @@ def retrieve():
     return input
 def saveas():
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = asksaveasfile(filetypes = files, defaultextension = files)
+    file = tkinter.filedialog.asksaveasfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'w') as newfile:
         newfile.write(retrieve())
-#def openfile():
-#    return
+def openfile():
+    files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
+    file = tkinter.filedialog.askopenfile(filetypes = files, defaultextension = files)
+    parselist = str(file).split('\'')
+    with open(parselist[1],'r') as thefilename:
+        x = thefilename.read()
+        textbox.delete(1.0, END)
+        textbox.insert(INSERT, x)
 ui_manager = uimanager.UIManager(frame = [800,600])
 # print(ui_manager.is_fullscreen)
 root = Tk()
 menubar = Menu(root)
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New")
-filemenu.add_command(label="Open")
+filemenu.add_command(label="Open", command =lambda : openfile())
 filemenu.add_command(label="Save")
 filemenu.add_command(label="Save As...", command=lambda : saveas())
 filemenu.add_command(label="Exit", command=root.quit)
@@ -37,8 +43,6 @@ side_scrollbar.config(command=textbox.xview)
 textbox.config(yscrollcommand=scrollbar.set)
 textbox.config(xscrollcommand=side_scrollbar.set)
 textbox.insert(END, "Click here to type\n")
-
-# print(input)
 root.geometry("800x600")
 app = window.Window(root)
 app.draw()
