@@ -11,9 +11,9 @@ class Window(Frame):
     def draw(self):
         self.master.title("JDE")
         self.pack(fill=BOTH, expand=1)
-        quitButton = Button(self, text="Exit", command = self.close_window)
-        quitButton.place(x=0, y=0)
     def resize_to(self, target_resolution):
-      tar_x, tar_y = target_resolution
-      target_resolution_string = str(tar_x) + 'x' + str(tar_y)
-      self.master.geometry(target_resolution_string)
+        tar_x, tar_y = target_resolution
+        target_resolution_string = str(tar_x) + 'x' + str(tar_y)
+        self.master.geometry(target_resolution_string)
+    def settitle(self, title):
+        self.master.title("JDE" + ":" + title)
