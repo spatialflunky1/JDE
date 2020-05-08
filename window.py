@@ -12,6 +12,8 @@ class Window(Frame):
         self.master.title("JDE")
         self.pack(fill=BOTH, expand=1)
     def resize_to(self, target_resolution):
-      tar_x, tar_y = target_resolution
-      target_resolution_string = str(tar_x) + 'x' + str(tar_y)
-      self.master.geometry(target_resolution_string)
+        tar_x, tar_y = target_resolution
+        target_resolution_string = str(tar_x) + 'x' + str(tar_y)
+        self.master.geometry(target_resolution_string)
+    def settitle(self, title):
+        self.master.title("JDE" + ":" + title)
