@@ -30,10 +30,12 @@ def openfile():
     parselist = str(file).split('\'')
     with open(parselist[1],'r') as thefilename:
         x = thefilename.read()
-        app.settitle(thefilename)
+        app.settitle(parselist[1])
         textbox.delete(1.0, END)
         textbox.insert(INSERT, x)
 def new():
+    global app
+    app.settitle("NewFile")
     textbox.delete(1.0, END)
 ui_manager = uimanager.UIManager(frame = [800,600])
 # print(ui_manager.is_fullscreen)
