@@ -37,6 +37,8 @@ def new():
     global app
     app.settitle("NewFile")
     textbox.delete(1.0, END)
+def popup(event):
+    rightclickmenu.tk_popup(event.x_root, event.y_root)
 ui_manager = uimanager.UIManager(frame = [800,600])
 # print(ui_manager.is_fullscreen)
 filepath = ""
@@ -57,6 +59,12 @@ editmenu.add_command(label="Redo")
 editmenu.add_command(label="Find")
 editmenu.add_command(label="Find & Replace")
 menubar.add_cascade(label="Edit", menu=editmenu)
+rightclickmenu = Menu(menubar, tearoff=0)
+rightclickmenu.add_command(label="Copy")
+rightclickmenu.add_command(label="Paste")
+rightclickmenu.add_command(label="Undo")
+rightclickmenu.add_command(label="Redo")
+root.bind("<Button-3>", popup)
 root.config(menu=menubar)
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
