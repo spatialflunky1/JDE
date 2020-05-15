@@ -10,7 +10,7 @@ class Window(Frame):
         self.master.destroy()
     def draw(self):
         self.master.title("JDE:NewFile")
-        self.pack(fill=BOTH, expand=1)
+        self.pack(fill=BOTH)
     def resize_to(self, target_resolution):
         tar_x, tar_y = target_resolution
         target_resolution_string = str(tar_x) + 'x' + str(tar_y)
