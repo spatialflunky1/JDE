@@ -3,6 +3,7 @@ import tkinter.filedialog
 import time
 import window
 import uimanager
+import tkinter.ttk as ttk
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -57,7 +58,35 @@ def undoo(event=None):
 #    textbox.edit_separator()
 def redoo(event=None):
     textbox.edit_redo()
-ui_manager = uimanager.UIManager(frame = [800,600])
+def colorwhite():
+    textbox.configure(bg = 'white')
+def colorgray():
+    textbox.configure(bg = 'gray')
+def colorred():
+    textbox.configure(bg = 'red')
+def colorpurple():
+    textbox.configure(bg = 'purple')
+def colormagenta():
+    textbox.configure(bg = 'magenta')
+def colorpink():
+    textbox.configure(bg = 'pink')
+def colorblue():
+    textbox.configure(bg = 'blue')
+def colorcyan():
+    textbox.configure(bg = 'cyan')
+def colorgreen():
+    textbox.configure(bg = 'green')
+def colorng():
+    textbox.configure(bg = 'green2')
+def colorgy():
+    textbox.configure(bg = 'green yellow')
+def coloryg():
+    textbox.configure(bg = 'yellow green')
+def coloryellow():
+    textbox.configure(bg = 'yellow')
+def colororange():
+    textbox.configure(bg = 'orange')
+ui_manager = uimanager.UIManager(frame = [950,430])
 # print(ui_manager.is_fullscreen)
 filepath = ""
 root = Tk()
@@ -79,6 +108,22 @@ editmenu.add_command(label="Redo                      Ctrl + Y", command =lambda
 editmenu.add_command(label="Find                       Ctrl + F")
 editmenu.add_command(label="Find & Replace    Ctrl + Shift + F")
 menubar.add_cascade(label="Edit", menu=editmenu)
+colormenu = Menu(menubar, tearoff=0)
+colormenu.add_command(label="White", command =lambda : colorwhite())
+colormenu.add_command(label="Gray", command =lambda : colorgray())
+colormenu.add_command(label="Red", command =lambda : colorred())
+colormenu.add_command(label="Purple", command =lambda : colorpurple())
+colormenu.add_command(label="Magenta", command =lambda : colormagenta())
+colormenu.add_command(label="Pink", command =lambda : colorpink())
+colormenu.add_command(label="Blue", command =lambda : colorblue())
+colormenu.add_command(label="Cyan", command =lambda : colorcyan())
+colormenu.add_command(label="Green", command =lambda : colorgreen())
+colormenu.add_command(label="Light Green", command =lambda : colorng())
+colormenu.add_command(label="Green Yellow", command =lambda : colorgy())
+colormenu.add_command(label="Yellow Green", command =lambda : coloryg())
+colormenu.add_command(label="Yellow", command =lambda : coloryellow())
+colormenu.add_command(label="Orange", command =lambda : colororange())
+menubar.add_cascade(label="Color", menu=colormenu)
 rightclickmenu = Menu(menubar, tearoff=0)
 rightclickmenu.add_command(label="Copy", command =lambda : copy())
 rightclickmenu.add_command(label="Cut", command =lambda : cut())
@@ -101,6 +146,7 @@ side_scrollbar.config(command=textbox.xview)
 textbox.config(yscrollcommand=scrollbar.set)
 textbox.config(xscrollcommand=side_scrollbar.set)
 textbox.insert(END, "Click here to type\n")
+root.iconbitmap(default="jde.ico")
 root.geometry("950x430")
 app = window.Window(root)
 app.draw()
