@@ -1,4 +1,5 @@
 from tkinter import *
+from PIL import ImageTk, Image
 import tkinter.filedialog
 import time
 import window
@@ -86,11 +87,83 @@ def coloryellow():
     textbox.configure(bg = 'yellow')
 def colororange():
     textbox.configure(bg = 'orange')
+def find():
+    global searchbox
+    textbox.tag_remove('found', '1.0', END)
+    s = searchbox.get()
+    if s:
+        idx = '1.0'
+        while 1:
+            idx = textbox.search(s, idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len(s))
+            textbox.tag_add('found', idx, lastidx)
+            idx = lastidx
+        textbox.tag_config('found', foreground='red')
+def findreplace():
+    return
+def findbox():
+    global searchbox
+    newbox = Toplevel(app)
+    searchbox = Entry(newbox)
+    searchbox.pack(side=LEFT, fill=BOTH, expand=1)
+    okbutton = Button(newbox, text = "Ok",  command = newbox.destroy)
+    okbutton.pack(side=RIGHT)
+    findbutton = Button(newbox, text = "Find",  command =lambda : find())
+    findbutton.pack(side=RIGHT)
+def aboutbox():
+    global aboutwin
+    try:
+        if aboutwin.state() == "normal":
+            aboutwin.focus()
+    except:
+        aboutwin = Toplevel(root)
+        aboutwin.geometry("465x350")
+        nm = Label(aboutwin, text="JDE", foreground='deep sky blue')
+        nm.configure(font=("Segoe UI", 16, "bold"))
+        nm.pack()
+        nm.place(rely=1, relx=1, x=-245, y=-160, anchor=S)
+
+        nms = Label(aboutwin, text="Jakes Development Environment")
+        nms.configure(font=("Segoe UI", 14))
+        nms.pack()
+        nms.place(rely=1, relx=1, x=-245, y=-130, anchor=S)
+
+        ds = Label(aboutwin, text="An Integrated Development \nEnvironment to code Python and others in the future.")
+        ds.configure(font=("Segoe UI", 12))
+        ds.pack()
+        ds.place(rely=1, relx=1, x=-245, y=-75, anchor=S)
+
+        wb = Label(aboutwin, text="Developed by:")
+        wb.configure(font=("Segoe UI", 12))
+        wb.pack()
+        wb.place(rely=1, relx=1, x=-280, y=-35, anchor=S)
+
+        db = Label(aboutwin, text="Spatialflunky1", foreground="dodger blue")
+        db.configure(font=("Segoe UI", 12))
+        db.pack()
+        db.place(rely=1, relx=1, x=-175, y=-35, anchor=S)
+
+        vs = Label(aboutwin, text="Version 0.0.18")
+        vs.configure(font=("Segoe UI", 10))
+        vs.pack()
+        vs.place(rely=1, relx=1, x=-245, y=-5, anchor=S)
+
+        okbutton = ttk.Button(aboutwin, text = "OK",  command = aboutwin.destroy)
+        okbutton.pack()
+        okbutton.place(rely=1.0, relx=1.0, x=0, y=0, anchor=SE)
+        
+        load = Image.open("JDEbanner.png")
+        render = ImageTk.PhotoImage(load)
+        img = Label(aboutwin, image=render)
+        img.image = render
+        img.place(x=0, y=0)
 ui_manager = uimanager.UIManager(frame = [950,430])
 # print(ui_manager.is_fullscreen)
 filepath = ""
 root = Tk()
 menubar = Menu(root)
+
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command =lambda : new())
 filemenu.add_command(label="Open", command =lambda : openfile())
@@ -98,6 +171,7 @@ filemenu.add_command(label="Save", command =lambda : save())
 filemenu.add_command(label="Save As...", command=lambda : saveas())
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
+
 editmenu = Menu(menubar, tearoff=0)
 editmenu.add_command(label="Copy                     Ctrl + C", command =lambda : copy())
 editmenu.add_command(label="Cut                        Ctrl + Z", command =lambda :cut())
@@ -105,9 +179,10 @@ editmenu.add_command(label="Paste                     Ctrl + V", command =lambda
 editmenu.add_command(label="Select All               Ctrl + A", command =lambda : select_all())
 editmenu.add_command(label="Undo                     Ctrl + Z", command =lambda : undoo())
 editmenu.add_command(label="Redo                      Ctrl + Y", command =lambda : redoo())
-editmenu.add_command(label="Find                       Ctrl + F")
-editmenu.add_command(label="Find & Replace    Ctrl + Shift + F")
+editmenu.add_command(label="Find                       Ctrl + F", command =lambda : findbox())
+editmenu.add_command(label="Find & Replace    Ctrl + Shift + F", command =lambda : findreplace())
 menubar.add_cascade(label="Edit", menu=editmenu)
+
 colormenu = Menu(menubar, tearoff=0)
 colormenu.add_command(label="White", command =lambda : colorwhite())
 colormenu.add_command(label="Gray", command =lambda : colorgray())
@@ -124,6 +199,11 @@ colormenu.add_command(label="Yellow Green", command =lambda : coloryg())
 colormenu.add_command(label="Yellow", command =lambda : coloryellow())
 colormenu.add_command(label="Orange", command =lambda : colororange())
 menubar.add_cascade(label="Color", menu=colormenu)
+
+helpmenu = Menu(menubar, tearoff=0)
+helpmenu.add_command(label="About", command =lambda : aboutbox())
+menubar.add_cascade(label="Help", menu=helpmenu)
+
 rightclickmenu = Menu(menubar, tearoff=0)
 rightclickmenu.add_command(label="Copy", command =lambda : copy())
 rightclickmenu.add_command(label="Cut", command =lambda : cut())
@@ -131,6 +211,7 @@ rightclickmenu.add_command(label="Paste", command =lambda: paste())
 rightclickmenu.add_command(label="Select All", command =lambda : select_all())
 rightclickmenu.add_command(label="Undo", command =lambda : undoo())
 rightclickmenu.add_command(label="Redo", command =lambda : redoo())
+
 root.bind("<Button-3>", popup)
 root.bind("<Control-z>", undoo)
 root.bind("<Control-y>", redoo)
