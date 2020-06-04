@@ -59,34 +59,6 @@ def undoo(event=None):
 #    textbox.edit_separator()
 def redoo(event=None):
     textbox.edit_redo()
-def colorwhite():
-    textbox.configure(bg = 'white')
-def colorgray():
-    textbox.configure(bg = 'gray')
-def colorred():
-    textbox.configure(bg = 'red')
-def colorpurple():
-    textbox.configure(bg = 'purple')
-def colormagenta():
-    textbox.configure(bg = 'magenta')
-def colorpink():
-    textbox.configure(bg = 'pink')
-def colorblue():
-    textbox.configure(bg = 'blue')
-def colorcyan():
-    textbox.configure(bg = 'cyan')
-def colorgreen():
-    textbox.configure(bg = 'green')
-def colorng():
-    textbox.configure(bg = 'green2')
-def colorgy():
-    textbox.configure(bg = 'green yellow')
-def coloryg():
-    textbox.configure(bg = 'yellow green')
-def coloryellow():
-    textbox.configure(bg = 'yellow')
-def colororange():
-    textbox.configure(bg = 'orange')
 def find():
     global searchbox
     textbox.tag_remove('found', '1.0', END)
@@ -99,9 +71,36 @@ def find():
             lastidx = '%s+%dc' % (idx, len(s))
             textbox.tag_add('found', idx, lastidx)
             idx = lastidx
-        textbox.tag_config('found', foreground='red')
+        textbox.tag_config('found', foreground = 'red')
 def findreplace():
-    return
+        global searchrbox
+        global replacebox
+        textbox.tag_remove('found', '1.0', END)
+        s = searchrbox.get()
+        f = replacebox.get()
+        if s:
+            idx = '1.0'
+            while 1:
+                idx = textbox.search(s, idx, nocase=1, stopindex=END)
+                if not idx: break
+                lastidx = '%s+%dc' % (idx, len(s))
+                textbox.tag_add('found', idx, lastidx)
+                idx = lastidx
+            textbox.replace("found.first", "found.last", f)
+def findreplacebox():
+    global searchrbox
+    global replacebox
+    newbox = Toplevel(app)
+    searchrbox = Entry(newbox)
+    searchrbox.pack(side=LEFT, fill=BOTH, expand=1)
+    searchrbox.insert(END, "Find")
+    replacebox = Entry(newbox)
+    replacebox.pack(side=LEFT, fill=BOTH, expand=1)
+    replacebox.insert(END, "Replace")
+    okbutton = Button(newbox, text = "Ok",  command = newbox.destroy)
+    okbutton.pack(side=RIGHT)
+    findreplacebutton = Button(newbox, text = "Replace",  command =lambda : findreplace())
+    findreplacebutton.pack(side=RIGHT)
 def findbox():
     global searchbox
     newbox = Toplevel(app)
@@ -119,7 +118,7 @@ def aboutbox():
     except:
         aboutwin = Toplevel(root)
         aboutwin.geometry("465x350")
-        nm = Label(aboutwin, text="JDE", foreground='deep sky blue')
+        nm = Label(aboutwin, text="JDE", fg='deep sky blue')
         nm.configure(font=("Segoe UI", 16, "bold"))
         nm.pack()
         nm.place(rely=1, relx=1, x=-245, y=-160, anchor=S)
@@ -139,7 +138,7 @@ def aboutbox():
         wb.pack()
         wb.place(rely=1, relx=1, x=-280, y=-35, anchor=S)
 
-        db = Label(aboutwin, text="Spatialflunky1", foreground="dodger blue")
+        db = Label(aboutwin, text="Spatialflunky1", fg="dodger blue")
         db.configure(font=("Segoe UI", 12))
         db.pack()
         db.place(rely=1, relx=1, x=-175, y=-35, anchor=S)
@@ -152,7 +151,7 @@ def aboutbox():
         okbutton = ttk.Button(aboutwin, text = "OK",  command = aboutwin.destroy)
         okbutton.pack()
         okbutton.place(rely=1.0, relx=1.0, x=0, y=0, anchor=SE)
-        
+
         load = Image.open("JDEbanner.png")
         render = ImageTk.PhotoImage(load)
         img = Label(aboutwin, image=render)
@@ -179,25 +178,46 @@ editmenu.add_command(label="Paste                     Ctrl + V", command =lambda
 editmenu.add_command(label="Select All               Ctrl + A", command =lambda : select_all())
 editmenu.add_command(label="Undo                     Ctrl + Z", command =lambda : undoo())
 editmenu.add_command(label="Redo                      Ctrl + Y", command =lambda : redoo())
-editmenu.add_command(label="Find                       Ctrl + F", command =lambda : findbox())
-editmenu.add_command(label="Find & Replace    Ctrl + Shift + F", command =lambda : findreplace())
+editmenu.add_command(label="Find", command =lambda : findbox())
+editmenu.add_command(label="Find & Replace", command =lambda : findreplacebox())
 menubar.add_cascade(label="Edit", menu=editmenu)
 
 colormenu = Menu(menubar, tearoff=0)
-colormenu.add_command(label="White", command =lambda : colorwhite())
-colormenu.add_command(label="Gray", command =lambda : colorgray())
-colormenu.add_command(label="Red", command =lambda : colorred())
-colormenu.add_command(label="Purple", command =lambda : colorpurple())
-colormenu.add_command(label="Magenta", command =lambda : colormagenta())
-colormenu.add_command(label="Pink", command =lambda : colorpink())
-colormenu.add_command(label="Blue", command =lambda : colorblue())
-colormenu.add_command(label="Cyan", command =lambda : colorcyan())
-colormenu.add_command(label="Green", command =lambda : colorgreen())
-colormenu.add_command(label="Light Green", command =lambda : colorng())
-colormenu.add_command(label="Green Yellow", command =lambda : colorgy())
-colormenu.add_command(label="Yellow Green", command =lambda : coloryg())
-colormenu.add_command(label="Yellow", command =lambda : coloryellow())
-colormenu.add_command(label="Orange", command =lambda : colororange())
+background = Menu(colormenu, tearoff=0)
+background.add_command(label="Black", command =lambda : textbox.configure(bg = 'black', fg = 'white'))
+background.add_command(label="White", command =lambda : textbox.configure(bg = 'white', fg = 'black'))
+background.add_command(label="Gray", command =lambda : textbox.configure(bg = 'gray', fg = 'black'))
+background.add_command(label="Red", command =lambda : textbox.configure(bg = 'red', fg = 'white'))
+background.add_command(label="Purple", command =lambda : textbox.configure(bg = 'purple', fg = "white"))
+background.add_command(label="Magenta", command =lambda : textbox.configure(bg = 'magenta', fg = 'black'))
+background.add_command(label="Pink", command =lambda : textbox.configure(bg = 'pink', fg = 'black'))
+background.add_command(label="Blue", command =lambda : textbox.configure(bg = 'blue', fg = 'white'))
+background.add_command(label="Cyan", command =lambda : textbox.configure(bg = 'cyan', fg = 'black'))
+background.add_command(label="Green", command =lambda : textbox.configure(bg = 'green', fg = 'black'))
+background.add_command(label="Light Green", command =lambda : textbox.configure(bg = 'green2', fg = 'black'))
+background.add_command(label="Green Yellow", command =lambda : textbox.configure(bg = 'green yellow', fg = 'black'))
+background.add_command(label="Yellow Green", command =lambda : textbox.configure(bg = 'yellow green', fg = 'black'))
+background.add_command(label="Yellow", command =lambda : textbox.configure(bg = 'yellow', fg = 'black'))
+background.add_command(label="Orange", command =lambda : textbox.configure(bg = 'orange', fg = 'black'))
+colormenu.add_cascade(label="Background", menu=background)
+
+textcolor = Menu(colormenu, tearoff=0)
+textcolor.add_command(label="Black", command =lambda : textbox.configure(fg = 'black'))
+textcolor.add_command(label="White", command =lambda : textbox.configure(fg = 'white'))
+textcolor.add_command(label="Gray", command =lambda : textbox.configure(fg = 'gray'))
+textcolor.add_command(label="Red", command =lambda : textbox.configure(fg = 'red'))
+textcolor.add_command(label="Purple", command =lambda : textbox.configure(fg = 'purple'))
+textcolor.add_command(label="Magenta", command =lambda : textbox.configure(fg = 'magenta'))
+textcolor.add_command(label="Pink", command =lambda : textbox.configure(fg = 'pink'))
+textcolor.add_command(label="Blue", command =lambda : textbox.configure(fg = 'blue'))
+textcolor.add_command(label="Cyan", command =lambda : textbox.configure(fg = 'cyan'))
+textcolor.add_command(label="Green", command =lambda : textbox.configure(fg = 'green'))
+textcolor.add_command(label="Light Green", command =lambda : textbox.configure(fg = 'green2'))
+textcolor.add_command(label="Green Yellow", command =lambda : textbox.configure(fg = 'green yellow'))
+textcolor.add_command(label="Yellow Green", command =lambda : textbox.configure(fg = 'yellow green'))
+textcolor.add_command(label="Yellow", command =lambda : textbox.configure(fg = 'yellow'))
+textcolor.add_command(label="Orange", command =lambda : textbox.configure(fg = 'orange'))
+colormenu.add_cascade(label = "Text", menu=textcolor)
 menubar.add_cascade(label="Color", menu=colormenu)
 
 helpmenu = Menu(menubar, tearoff=0)
