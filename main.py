@@ -178,7 +178,6 @@ def fontsizebox():
         newbox.resizable(False, False)
         sizebox = Entry(newbox)
         sizebox.pack(side=LEFT, fill=BOTH, expand=1)
-        fontsize = sizebox.get()
         okbutton = Button(newbox, text = "OK",  command = newbox.destroy)
         okbutton.pack(side=RIGHT)
         sizebutton = Button(newbox, text = "Set Size",  command =lambda : fontsizeset())
