@@ -5,7 +5,7 @@ Jake's Development Environment
 An Integrated Development Environment to code Python and others in the future.
 
 ## Version:
-Beta 0.1.0
+Beta 0.1.1
 
 ## How to Run
 #### Linux & macOS:
