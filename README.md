@@ -23,15 +23,7 @@ Make sure you are running python 3 with:
 python --version
 ```
 
-#### Make sure you have Tk installed with:
-Ubuntu:
-```
-sudo apt update
-sudo apt install tk
-sudo apt install python3-tk
-```
-Archlinux:
-```
-sudo pacman -Syu
-sudo pacman -S tk
-```
+### Dependencies:
+#### Python 3
+#### Tk/Tkinter (python library)
+#### Pillow (python library)
