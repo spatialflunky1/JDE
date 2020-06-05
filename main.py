@@ -91,7 +91,7 @@ def findreplace():
 def findreplacebox():
     global searchrbox
     global replacebox
-    newbox = Toplevel(app)\
+    newbox = Toplevel(app)
     newbox.resizable(False, False)
     searchrbox = Entry(newbox)
     searchrbox.pack(side=LEFT, fill=BOTH, expand=1)
