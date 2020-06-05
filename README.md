@@ -4,7 +4,7 @@ Jake's Development Environment
 ### Description:
 An Integrated Development Environment to code Python and others in the future.
 
-### Version:
+## Version:
 Beta 0.1.0
 
 ## How to Run
@@ -17,13 +17,15 @@ python main.py
 #### Windows:
 Run StartOnWindows.bat
 
-#### Note:
+## Dependencies:
+#### Python 3
+#### Tk/Tkinter (python library)
+#### Pillow (python library)
+
+
+## Note:
 Make sure you are running python 3 with:
 ```
 python --version
 ```
 
-### Dependencies:
-#### Python 3
-#### Tk/Tkinter (python library)
-#### Pillow (python library)
