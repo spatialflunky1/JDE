@@ -164,6 +164,7 @@ def aboutbox():
 def fontsizeset():
     global sizebox
     global defaultfont
+    global fontsize
     fontsize = sizebox.get()
     textbox.configure(font=(defaultfont, fontsize))
 def fontsizebox():
@@ -182,7 +183,11 @@ def fontsizebox():
         okbutton.pack(side=RIGHT)
         sizebutton = Button(newbox, text = "Set Size",  command =lambda : fontsizeset())
         sizebutton.pack(side=RIGHT)
-        
+def fontchange(font):
+    global defaultfont
+    global fontsize
+    textbox.configure(font=(font, fontsize))
+    defaultfont = font
 ui_manager = uimanager.UIManager(frame = [950,430])
 # print(ui_manager.is_fullscreen)
 filepath = ""
@@ -250,17 +255,16 @@ menubar.add_cascade(label="Color", menu=colormenu)
 
 formatmenu = Menu(menubar, tearoff=0)
 fontmenu = Menu(formatmenu, tearoff=0)
-fontmenu.add_command(label="Arial", command =lambda : textbox.configure(font=("Arial", fontsize)))
-fontmenu.add_command(label="Times New Roman", command =lambda : textbox.configure(font=("Times", fontsize)))
-fontmenu.add_command(label="Courier New", command =lambda : textbox.configure(font=("Courier", fontsize)))
-fontmenu.add_command(label="Fixedsys", command =lambda : textbox.configure(font=("Fixedsys", fontsize)))
-fontmenu.add_command(label="Comic Sans MS", command =lambda : textbox.configure(font=("Comic Sans MS", fontsize)))
-fontmenu.add_command(label="MS Sans Serif", command =lambda : textbox.configure(font=("MS Sans Serif", fontsize)))
-fontmenu.add_command(label="MS Serif", command =lambda : textbox.configure(font=("MS Serif", fontsize)))
-fontmenu.add_command(label="Symbol", command =lambda : textbox.configure(font=("Symbol", fontsize)))
-fontmenu.add_command(label="System", command =lambda : textbox.configure(font=("System", fontsize)))
-fontmenu.add_command(label="Verdana", command =lambda : textbox.configure(font=("Verdana", fontsize)))
-fontmenu.add_command(label="Add fontsize", command =lambda : fontsizeinc())
+fontmenu.add_command(label="Arial", command =lambda : fontchange("Arial"))
+fontmenu.add_command(label="Times New Roman", command =lambda : fontchange("Times"))
+fontmenu.add_command(label="Courier New", command =lambda : fontchange("Courier"))
+fontmenu.add_command(label="Fixedsys", command =lambda : fontchange("Fixedsys"))
+fontmenu.add_command(label="Comic Sans MS", command =lambda : fontchange("Comic Sans MS"))
+fontmenu.add_command(label="MS Sans Serif", command =lambda : fontchange("MS Sans Serif"))
+fontmenu.add_command(label="MS Serif", command =lambda : fontchange("MS Serif"))
+fontmenu.add_command(label="Symbol", command =lambda : fontchange("Symbol"))
+fontmenu.add_command(label="System", command =lambda : fontchange("System"))
+fontmenu.add_command(label="Verdana", command =lambda : fontchange("Verdana"))
 formatmenu.add_command(label="Size", command =lambda : fontsizebox())
 formatmenu.add_cascade(label="Font", menu=fontmenu)
 menubar.add_cascade(label="Format", menu=formatmenu)
