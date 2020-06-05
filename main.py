@@ -5,6 +5,7 @@ import time
 import window
 import uimanager
 import tkinter.ttk as ttk
+fontsize = 9
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -90,7 +91,8 @@ def findreplace():
 def findreplacebox():
     global searchrbox
     global replacebox
-    newbox = Toplevel(app)
+    newbox = Toplevel(app)\
+    newbox.resizable(False, False)
     searchrbox = Entry(newbox)
     searchrbox.pack(side=LEFT, fill=BOTH, expand=1)
     searchrbox.insert(END, "Find")
@@ -104,6 +106,7 @@ def findreplacebox():
 def findbox():
     global searchbox
     newbox = Toplevel(app)
+    newbox.resizable(False, False)
     searchbox = Entry(newbox)
     searchbox.pack(side=LEFT, fill=BOTH, expand=1)
     okbutton = Button(newbox, text = "Ok",  command = newbox.destroy)
@@ -117,6 +120,7 @@ def aboutbox():
             aboutwin.focus()
     except:
         aboutwin = Toplevel(root)
+        aboutwin.resizable(False, False)
         aboutwin.geometry("465x350")
         nm = Label(aboutwin, text="JDE", fg='deep sky blue')
         nm.configure(font=("Segoe UI", 16, "bold"))
@@ -157,11 +161,35 @@ def aboutbox():
         img = Label(aboutwin, image=render)
         img.image = render
         img.place(x=0, y=0)
+def fontsizeset():
+    global sizebox
+    global defaultfont
+    fontsize = sizebox.get()
+    textbox.configure(font=(defaultfont, fontsize))
+def fontsizebox():
+    global fontsizewin
+    global sizebox
+    try:
+        if fontsizewin.state() == "normal":
+            fontsizewin.focus()
+    except:
+        newbox = Toplevel(app)
+        newbox.resizable(False, False)
+        sizebox = Entry(newbox)
+        sizebox.pack(side=LEFT, fill=BOTH, expand=1)
+        fontsize = sizebox.get()
+        okbutton = Button(newbox, text = "OK",  command = newbox.destroy)
+        okbutton.pack(side=RIGHT)
+        sizebutton = Button(newbox, text = "Set Size",  command =lambda : fontsizeset())
+        sizebutton.pack(side=RIGHT)
+        
 ui_manager = uimanager.UIManager(frame = [950,430])
 # print(ui_manager.is_fullscreen)
 filepath = ""
 root = Tk()
 menubar = Menu(root)
+defaultfont = "Arial"
+fontsize = 9
 
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command =lambda : new())
@@ -220,6 +248,23 @@ textcolor.add_command(label="Orange", command =lambda : textbox.configure(fg = '
 colormenu.add_cascade(label = "Text", menu=textcolor)
 menubar.add_cascade(label="Color", menu=colormenu)
 
+formatmenu = Menu(menubar, tearoff=0)
+fontmenu = Menu(formatmenu, tearoff=0)
+fontmenu.add_command(label="Arial", command =lambda : textbox.configure(font=("Arial", fontsize)))
+fontmenu.add_command(label="Times New Roman", command =lambda : textbox.configure(font=("Times", fontsize)))
+fontmenu.add_command(label="Courier New", command =lambda : textbox.configure(font=("Courier", fontsize)))
+fontmenu.add_command(label="Fixedsys", command =lambda : textbox.configure(font=("Fixedsys", fontsize)))
+fontmenu.add_command(label="Comic Sans MS", command =lambda : textbox.configure(font=("Comic Sans MS", fontsize)))
+fontmenu.add_command(label="MS Sans Serif", command =lambda : textbox.configure(font=("MS Sans Serif", fontsize)))
+fontmenu.add_command(label="MS Serif", command =lambda : textbox.configure(font=("MS Serif", fontsize)))
+fontmenu.add_command(label="Symbol", command =lambda : textbox.configure(font=("Symbol", fontsize)))
+fontmenu.add_command(label="System", command =lambda : textbox.configure(font=("System", fontsize)))
+fontmenu.add_command(label="Verdana", command =lambda : textbox.configure(font=("Verdana", fontsize)))
+fontmenu.add_command(label="Add fontsize", command =lambda : fontsizeinc())
+formatmenu.add_command(label="Size", command =lambda : fontsizebox())
+formatmenu.add_cascade(label="Font", menu=fontmenu)
+menubar.add_cascade(label="Format", menu=formatmenu)
+
 helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label="About", command =lambda : aboutbox())
 menubar.add_cascade(label="Help", menu=helpmenu)
@@ -231,10 +276,10 @@ rightclickmenu.add_command(label="Paste", command =lambda: paste())
 rightclickmenu.add_command(label="Select All", command =lambda : select_all())
 rightclickmenu.add_command(label="Undo", command =lambda : undoo())
 rightclickmenu.add_command(label="Redo", command =lambda : redoo())
-
 root.bind("<Button-3>", popup)
 root.bind("<Control-z>", undoo)
 root.bind("<Control-y>", redoo)
+#root.bind("<Control-y>", lambda : fontsizeinc())
 root.config(menu=menubar)
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
@@ -246,6 +291,7 @@ scrollbar.config(command=textbox.yview)
 side_scrollbar.config(command=textbox.xview)
 textbox.config(yscrollcommand=scrollbar.set)
 textbox.config(xscrollcommand=side_scrollbar.set)
+textbox.configure(font=(defaultfont, fontsize))
 textbox.insert(END, "Click here to type\n")
 root.iconbitmap(default="jde.ico")
 root.geometry("950x430")
