@@ -147,7 +147,7 @@ def aboutbox():
         db.pack()
         db.place(rely=1, relx=1, x=-175, y=-35, anchor=S)
 
-        vs = Label(aboutwin, text="Version 0.1.1")
+        vs = Label(aboutwin, text="Version 0.1.2")
         vs.configure(font=("Segoe UI", 10))
         vs.pack()
         vs.place(rely=1, relx=1, x=-245, y=-5, anchor=S)

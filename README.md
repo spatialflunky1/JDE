@@ -5,7 +5,7 @@ Jake's Development Environment
 An Integrated Development Environment to code Python and others in the future.
 
 ## Version:
-Beta 0.1.1
+Beta 0.1.2
 
 ## How to Run
 #### Linux & macOS:
@@ -15,7 +15,7 @@ python main.py
 ```
 
 #### Windows:
-Run StartOnWindows.bat
+Run main.pyw
 
 ## Dependencies:
 #### Python 3
