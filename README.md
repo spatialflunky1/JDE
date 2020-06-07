@@ -11,7 +11,7 @@ Beta 0.1.1.5
 #### Linux & macOS:
 In terminal run:
 ```
-python main.py
+python main.pyw
 ```
 
 #### Windows:
