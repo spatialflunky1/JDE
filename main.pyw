@@ -5,7 +5,7 @@ import time
 import window
 import uimanager
 import tkinter.ttk as ttk
-fontsize = 9
+fontsize = 11
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -193,7 +193,7 @@ filepath = ""
 root = Tk()
 menubar = Menu(root)
 defaultfont = "Arial"
-fontsize = 9
+fontsize = 11
 
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command =lambda : new())
@@ -297,7 +297,7 @@ textbox.config(xscrollcommand=side_scrollbar.set)
 textbox.configure(font=(defaultfont, fontsize))
 textbox.insert(END, "Click here to type\n")
 root.iconbitmap(default="jde.ico")
-root.geometry("950x430")
+root.geometry("1020x725")
 app = window.Window(root)
 app.draw()
 root.mainloop()
