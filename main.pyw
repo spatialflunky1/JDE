@@ -3,9 +3,8 @@ from PIL import ImageTk, Image
 import tkinter.filedialog as tkf
 import time
 import window
-import uimanager
 import tkinter.ttk as ttk
-fontsize = 10
+from options import *
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -147,7 +146,7 @@ def aboutbox():
         db.pack()
         db.place(rely=1, relx=1, x=-175, y=-35, anchor=S)
 
-        vs = Label(aboutwin, text="Version 0.1.1.5")
+        vs = Label(aboutwin, text=version)
         vs.configure(font=("Segoe UI", 10))
         vs.pack()
         vs.place(rely=1, relx=1, x=-245, y=-5, anchor=S)
@@ -156,7 +155,7 @@ def aboutbox():
         okbutton.pack()
         okbutton.place(rely=1.0, relx=1.0, x=0, y=0, anchor=SE)
 
-        load = Image.open("JDEbanner.png")
+        load = Image.open(aboutbanner)
         render = ImageTk.PhotoImage(load)
         img = Label(aboutwin, image=render)
         img.image = render
@@ -187,13 +186,13 @@ def fontchange(font):
     global fontsize
     textbox.configure(font=(font, fontsize))
     defaultfont = font
-ui_manager = uimanager.UIManager(frame = [950,430])
+def tab(arg):
+    textbox.insert(INSERT, "    ")
+    return 'break'
 # print(ui_manager.is_fullscreen)
 filepath = ""
 root = Tk()
 menubar = Menu(root)
-defaultfont = "Consolas"
-fontsize = 10
 
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command =lambda : new())
@@ -251,6 +250,7 @@ root.config(menu=menubar)
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
 textbox = Text(root, undo=True)
+textbox.bind("<Tab>", tab)
 textbox.configure(bg = 'gray19', fg = 'white')
 textbox.configure(insertbackground='white')
 scrollbar.pack(side=RIGHT, fill=Y)
@@ -262,8 +262,8 @@ textbox.config(yscrollcommand=scrollbar.set)
 textbox.config(xscrollcommand=side_scrollbar.set)
 textbox.configure(font=(defaultfont, fontsize))
 textbox.insert(END, "Click here to type\n")
-root.iconbitmap(default="jde.ico")
-root.geometry("1020x725")
+root.iconbitmap(default=icon)
+root.geometry(windowsize)
 app = window.Window(root)
 app.draw()
 root.mainloop()
