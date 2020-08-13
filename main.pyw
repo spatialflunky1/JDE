@@ -1,11 +1,10 @@
 from tkinter import *
 from PIL import ImageTk, Image
-import tkinter.filedialog
+import tkinter.filedialog as tkf
 import time
 import window
-import uimanager
 import tkinter.ttk as ttk
-fontsize = 9
+from options import *
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -22,7 +21,7 @@ def saveas():
     global filepath
     global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = tkinter.filedialog.asksaveasfile(filetypes = files, defaultextension = files)
+    file = tkf.asksaveasfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'w') as newfile:
         newfile.write(retrieve())
@@ -31,7 +30,7 @@ def saveas():
 def openfile():
     global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = tkinter.filedialog.askopenfile(filetypes = files, defaultextension = files)
+    file = tkf.askopenfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'r') as thefilename:
         x = thefilename.read()
@@ -147,7 +146,7 @@ def aboutbox():
         db.pack()
         db.place(rely=1, relx=1, x=-175, y=-35, anchor=S)
 
-        vs = Label(aboutwin, text="Version 0.1.1")
+        vs = Label(aboutwin, text=version)
         vs.configure(font=("Segoe UI", 10))
         vs.pack()
         vs.place(rely=1, relx=1, x=-245, y=-5, anchor=S)
@@ -156,7 +155,7 @@ def aboutbox():
         okbutton.pack()
         okbutton.place(rely=1.0, relx=1.0, x=0, y=0, anchor=SE)
 
-        load = Image.open("JDEbanner.png")
+        load = Image.open(aboutbanner)
         render = ImageTk.PhotoImage(load)
         img = Label(aboutwin, image=render)
         img.image = render
@@ -187,13 +186,13 @@ def fontchange(font):
     global fontsize
     textbox.configure(font=(font, fontsize))
     defaultfont = font
-ui_manager = uimanager.UIManager(frame = [950,430])
+def tab(arg):
+    textbox.insert(INSERT, "    ")
+    return 'break'
 # print(ui_manager.is_fullscreen)
 filepath = ""
 root = Tk()
 menubar = Menu(root)
-defaultfont = "Arial"
-fontsize = 9
 
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command =lambda : new())
@@ -214,53 +213,17 @@ editmenu.add_command(label="Find", command =lambda : findbox())
 editmenu.add_command(label="Find & Replace", command =lambda : findreplacebox())
 menubar.add_cascade(label="Edit", menu=editmenu)
 
-colormenu = Menu(menubar, tearoff=0)
-background = Menu(colormenu, tearoff=0)
-background.add_command(label="Black", command =lambda : textbox.configure(bg = 'black', fg = 'white'))
-background.add_command(label="White", command =lambda : textbox.configure(bg = 'white', fg = 'black'))
-background.add_command(label="Gray", command =lambda : textbox.configure(bg = 'gray', fg = 'black'))
-background.add_command(label="Red", command =lambda : textbox.configure(bg = 'red', fg = 'white'))
-background.add_command(label="Purple", command =lambda : textbox.configure(bg = 'purple', fg = "white"))
-background.add_command(label="Magenta", command =lambda : textbox.configure(bg = 'magenta', fg = 'black'))
-background.add_command(label="Pink", command =lambda : textbox.configure(bg = 'pink', fg = 'black'))
-background.add_command(label="Blue", command =lambda : textbox.configure(bg = 'blue', fg = 'white'))
-background.add_command(label="Cyan", command =lambda : textbox.configure(bg = 'cyan', fg = 'black'))
-background.add_command(label="Green", command =lambda : textbox.configure(bg = 'green', fg = 'black'))
-background.add_command(label="Light Green", command =lambda : textbox.configure(bg = 'green2', fg = 'black'))
-background.add_command(label="Green Yellow", command =lambda : textbox.configure(bg = 'green yellow', fg = 'black'))
-background.add_command(label="Yellow Green", command =lambda : textbox.configure(bg = 'yellow green', fg = 'black'))
-background.add_command(label="Yellow", command =lambda : textbox.configure(bg = 'yellow', fg = 'black'))
-background.add_command(label="Orange", command =lambda : textbox.configure(bg = 'orange', fg = 'black'))
-colormenu.add_cascade(label="Background", menu=background)
-
-textcolor = Menu(colormenu, tearoff=0)
-textcolor.add_command(label="Black", command =lambda : textbox.configure(fg = 'black'))
-textcolor.add_command(label="White", command =lambda : textbox.configure(fg = 'white'))
-textcolor.add_command(label="Gray", command =lambda : textbox.configure(fg = 'gray'))
-textcolor.add_command(label="Red", command =lambda : textbox.configure(fg = 'red'))
-textcolor.add_command(label="Purple", command =lambda : textbox.configure(fg = 'purple'))
-textcolor.add_command(label="Magenta", command =lambda : textbox.configure(fg = 'magenta'))
-textcolor.add_command(label="Pink", command =lambda : textbox.configure(fg = 'pink'))
-textcolor.add_command(label="Blue", command =lambda : textbox.configure(fg = 'blue'))
-textcolor.add_command(label="Cyan", command =lambda : textbox.configure(fg = 'cyan'))
-textcolor.add_command(label="Green", command =lambda : textbox.configure(fg = 'green'))
-textcolor.add_command(label="Light Green", command =lambda : textbox.configure(fg = 'green2'))
-textcolor.add_command(label="Green Yellow", command =lambda : textbox.configure(fg = 'green yellow'))
-textcolor.add_command(label="Yellow Green", command =lambda : textbox.configure(fg = 'yellow green'))
-textcolor.add_command(label="Yellow", command =lambda : textbox.configure(fg = 'yellow'))
-textcolor.add_command(label="Orange", command =lambda : textbox.configure(fg = 'orange'))
-colormenu.add_cascade(label = "Text", menu=textcolor)
-menubar.add_cascade(label="Color", menu=colormenu)
-
 formatmenu = Menu(menubar, tearoff=0)
 fontmenu = Menu(formatmenu, tearoff=0)
 fontmenu.add_command(label="Arial", command =lambda : fontchange("Arial"))
 fontmenu.add_command(label="Times New Roman", command =lambda : fontchange("Times"))
+fontmenu.add_command(label="Consolas", command =lambda : fontchange("Consolas"))
 fontmenu.add_command(label="Courier New", command =lambda : fontchange("Courier"))
 fontmenu.add_command(label="Fixedsys", command =lambda : fontchange("Fixedsys"))
 fontmenu.add_command(label="Comic Sans MS", command =lambda : fontchange("Comic Sans MS"))
 fontmenu.add_command(label="MS Sans Serif", command =lambda : fontchange("MS Sans Serif"))
 fontmenu.add_command(label="MS Serif", command =lambda : fontchange("MS Serif"))
+fontmenu.add_command(label="Monaco", command =lambda : fontchange("Monaco"))
 fontmenu.add_command(label="Symbol", command =lambda : fontchange("Symbol"))
 fontmenu.add_command(label="System", command =lambda : fontchange("System"))
 fontmenu.add_command(label="Verdana", command =lambda : fontchange("Verdana"))
@@ -287,6 +250,9 @@ root.config(menu=menubar)
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
 textbox = Text(root, undo=True)
+textbox.bind("<Tab>", tab)
+textbox.configure(bg = 'gray19', fg = 'white')
+textbox.configure(insertbackground='white')
 scrollbar.pack(side=RIGHT, fill=Y)
 side_scrollbar.pack(side=BOTTOM, fill=X)
 textbox.pack(side=BOTTOM, fill=BOTH, expand=1)
@@ -296,8 +262,8 @@ textbox.config(yscrollcommand=scrollbar.set)
 textbox.config(xscrollcommand=side_scrollbar.set)
 textbox.configure(font=(defaultfont, fontsize))
 textbox.insert(END, "Click here to type\n")
-root.iconbitmap(default="jde.ico")
-root.geometry("950x430")
+root.iconbitmap(default=icon)
+root.geometry(windowsize)
 app = window.Window(root)
 app.draw()
 root.mainloop()
