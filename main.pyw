@@ -1,11 +1,11 @@
 from tkinter import *
 from PIL import ImageTk, Image
-import tkinter.filedialog
+import tkinter.filedialog as tkf
 import time
 import window
 import uimanager
 import tkinter.ttk as ttk
-fontsize = 11
+fontsize = 10
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -22,7 +22,7 @@ def saveas():
     global filepath
     global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = tkinter.filedialog.asksaveasfile(filetypes = files, defaultextension = files)
+    file = tkf.asksaveasfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'w') as newfile:
         newfile.write(retrieve())
@@ -31,7 +31,7 @@ def saveas():
 def openfile():
     global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = tkinter.filedialog.askopenfile(filetypes = files, defaultextension = files)
+    file = tkf.askopenfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'r') as thefilename:
         x = thefilename.read()
@@ -192,8 +192,8 @@ ui_manager = uimanager.UIManager(frame = [950,430])
 filepath = ""
 root = Tk()
 menubar = Menu(root)
-defaultfont = "Arial"
-fontsize = 11
+defaultfont = "Consolas"
+fontsize = 10
 
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command =lambda : new())
@@ -214,53 +214,17 @@ editmenu.add_command(label="Find", command =lambda : findbox())
 editmenu.add_command(label="Find & Replace", command =lambda : findreplacebox())
 menubar.add_cascade(label="Edit", menu=editmenu)
 
-colormenu = Menu(menubar, tearoff=0)
-background = Menu(colormenu, tearoff=0)
-background.add_command(label="Black", command =lambda : textbox.configure(bg = 'black', fg = 'white'))
-background.add_command(label="White", command =lambda : textbox.configure(bg = 'white', fg = 'black'))
-background.add_command(label="Gray", command =lambda : textbox.configure(bg = 'gray', fg = 'black'))
-background.add_command(label="Red", command =lambda : textbox.configure(bg = 'red', fg = 'white'))
-background.add_command(label="Purple", command =lambda : textbox.configure(bg = 'purple', fg = "white"))
-background.add_command(label="Magenta", command =lambda : textbox.configure(bg = 'magenta', fg = 'black'))
-background.add_command(label="Pink", command =lambda : textbox.configure(bg = 'pink', fg = 'black'))
-background.add_command(label="Blue", command =lambda : textbox.configure(bg = 'blue', fg = 'white'))
-background.add_command(label="Cyan", command =lambda : textbox.configure(bg = 'cyan', fg = 'black'))
-background.add_command(label="Green", command =lambda : textbox.configure(bg = 'green', fg = 'black'))
-background.add_command(label="Light Green", command =lambda : textbox.configure(bg = 'green2', fg = 'black'))
-background.add_command(label="Green Yellow", command =lambda : textbox.configure(bg = 'green yellow', fg = 'black'))
-background.add_command(label="Yellow Green", command =lambda : textbox.configure(bg = 'yellow green', fg = 'black'))
-background.add_command(label="Yellow", command =lambda : textbox.configure(bg = 'yellow', fg = 'black'))
-background.add_command(label="Orange", command =lambda : textbox.configure(bg = 'orange', fg = 'black'))
-colormenu.add_cascade(label="Background", menu=background)
-
-textcolor = Menu(colormenu, tearoff=0)
-textcolor.add_command(label="Black", command =lambda : textbox.configure(fg = 'black'))
-textcolor.add_command(label="White", command =lambda : textbox.configure(fg = 'white'))
-textcolor.add_command(label="Gray", command =lambda : textbox.configure(fg = 'gray'))
-textcolor.add_command(label="Red", command =lambda : textbox.configure(fg = 'red'))
-textcolor.add_command(label="Purple", command =lambda : textbox.configure(fg = 'purple'))
-textcolor.add_command(label="Magenta", command =lambda : textbox.configure(fg = 'magenta'))
-textcolor.add_command(label="Pink", command =lambda : textbox.configure(fg = 'pink'))
-textcolor.add_command(label="Blue", command =lambda : textbox.configure(fg = 'blue'))
-textcolor.add_command(label="Cyan", command =lambda : textbox.configure(fg = 'cyan'))
-textcolor.add_command(label="Green", command =lambda : textbox.configure(fg = 'green'))
-textcolor.add_command(label="Light Green", command =lambda : textbox.configure(fg = 'green2'))
-textcolor.add_command(label="Green Yellow", command =lambda : textbox.configure(fg = 'green yellow'))
-textcolor.add_command(label="Yellow Green", command =lambda : textbox.configure(fg = 'yellow green'))
-textcolor.add_command(label="Yellow", command =lambda : textbox.configure(fg = 'yellow'))
-textcolor.add_command(label="Orange", command =lambda : textbox.configure(fg = 'orange'))
-colormenu.add_cascade(label = "Text", menu=textcolor)
-menubar.add_cascade(label="Color", menu=colormenu)
-
 formatmenu = Menu(menubar, tearoff=0)
 fontmenu = Menu(formatmenu, tearoff=0)
 fontmenu.add_command(label="Arial", command =lambda : fontchange("Arial"))
 fontmenu.add_command(label="Times New Roman", command =lambda : fontchange("Times"))
+fontmenu.add_command(label="Consolas", command =lambda : fontchange("Consolas"))
 fontmenu.add_command(label="Courier New", command =lambda : fontchange("Courier"))
 fontmenu.add_command(label="Fixedsys", command =lambda : fontchange("Fixedsys"))
 fontmenu.add_command(label="Comic Sans MS", command =lambda : fontchange("Comic Sans MS"))
 fontmenu.add_command(label="MS Sans Serif", command =lambda : fontchange("MS Sans Serif"))
 fontmenu.add_command(label="MS Serif", command =lambda : fontchange("MS Serif"))
+fontmenu.add_command(label="Monaco", command =lambda : fontchange("Monaco"))
 fontmenu.add_command(label="Symbol", command =lambda : fontchange("Symbol"))
 fontmenu.add_command(label="System", command =lambda : fontchange("System"))
 fontmenu.add_command(label="Verdana", command =lambda : fontchange("Verdana"))
@@ -287,6 +251,7 @@ root.config(menu=menubar)
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
 textbox = Text(root, undo=True)
+textbox.configure(bg = 'gray19', fg = 'white')
 scrollbar.pack(side=RIGHT, fill=Y)
 side_scrollbar.pack(side=BOTTOM, fill=X)
 textbox.pack(side=BOTTOM, fill=BOTH, expand=1)
