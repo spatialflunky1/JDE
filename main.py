@@ -5,6 +5,8 @@ import time
 import window
 import tkinter.ttk as ttk
 from options import *
+import os
+interpreter = ''
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
@@ -28,11 +30,13 @@ def saveas():
     filepath = newfile.name
     app.settitle(filepath)
 def openfile():
+    global filepath
     global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
     file = tkf.askopenfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'r') as thefilename:
+        filepath = thefilename.name
         x = thefilename.read()
         app.settitle(parselist[1])
         textbox.delete(1.0, END)
@@ -91,6 +95,7 @@ def findreplacebox():
     global searchrbox
     global replacebox
     newbox = Toplevel(app)
+    newbox.title("Find and Replace")
     newbox.resizable(False, False)
     searchrbox = Entry(newbox)
     searchrbox.pack(side=LEFT, fill=BOTH, expand=1)
@@ -105,6 +110,7 @@ def findreplacebox():
 def findbox():
     global searchbox
     newbox = Toplevel(app)
+    newbox.title("")
     newbox.resizable(False, False)
     searchbox = Entry(newbox)
     searchbox.pack(side=LEFT, fill=BOTH, expand=1)
@@ -118,7 +124,8 @@ def aboutbox():
         if aboutwin.state() == "normal":
             aboutwin.focus()
     except:
-        aboutwin = Toplevel(root)
+        aboutwin = Toplevel(app)
+        aboutwin.title("About")
         aboutwin.resizable(False, False)
         aboutwin.geometry("465x350")
         nm = Label(aboutwin, text="JDE", fg='deep sky blue')
@@ -174,6 +181,7 @@ def fontsizebox():
             fontsizewin.focus()
     except:
         newbox = Toplevel(app)
+        newbox.title("Size")
         newbox.resizable(False, False)
         sizebox = Entry(newbox)
         sizebox.pack(side=LEFT, fill=BOTH, expand=1)
@@ -189,7 +197,24 @@ def fontchange(font):
 def tab(arg):
     textbox.insert(INSERT, "    ")
     return 'break'
-# print(ui_manager.is_fullscreen)
+def run():
+    if(filepath == ''):
+        errorbox = Toplevel(app)
+        errorbox.title("Error!")
+        errorbox.resizable(False, False)
+        error = Label(errorbox, text="No File Selected", fg="red")
+        error.configure(font=("Segoe UI", 12))
+        error.pack()
+        error.place(rely=1, relx=1, x=-190, y=-20, anchor=S)
+        errorbox.geometry("280x60")
+        okbutton = ttk.Button(errorbox, text = "Ok",  command = errorbox.destroy)
+        okbutton.pack()
+        okbutton.place(rely=1.0, relx=1.0, x=0, y=0, anchor=SE)
+        errorbox.focus()
+    else:
+        path = '"' + filepath + '"'
+        os.system("start python " + path)
+
 filepath = ""
 root = Tk()
 menubar = Menu(root)
@@ -247,6 +272,8 @@ root.bind("<Control-z>", undoo)
 root.bind("<Control-y>", redoo)
 #root.bind("<Control-y>", lambda : fontsizeinc())
 root.config(menu=menubar)
+runbutton = Button(root, text = "Run", command = lambda : run())
+runbutton.pack()
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
 textbox = Text(root, undo=True)
