@@ -9,11 +9,11 @@ class Window(Frame):
     def close_window(self):
         self.master.destroy()
     def draw(self):
-        self.master.title("JDE:NewFile")
+        self.master.title("JDE: NewFile")
         self.pack(fill=BOTH)
     def resize_to(self, target_resolution):
         tar_x, tar_y = target_resolution
         target_resolution_string = str(tar_x) + 'x' + str(tar_y)
         self.master.geometry(target_resolution_string)
     def settitle(self, title):
-        self.master.title("JDE" + ":" + title)
+        self.master.title("JDE" + ": " + title)

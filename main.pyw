@@ -1,49 +1,57 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import tkinter.filedialog as tkf
+import tkinter.messagebox as msgbox
 import time
-import window
 import tkinter.ttk as ttk
 from options import *
 import os
+from pytext import pythings
+
 interpreter = ''
+def settitle(title):
+    root.title("JDE" + ": " + title)
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
     input = textbox.get("1.0",END)
     return input
-def save():
+def save(event):
     global filepath
     if filepath == "":
         saveas()
     else:
         with open(filepath,'w') as newfile:
             newfile.write(retrieve())
+            parselist = str(filepath).split("/")
+            settitle(parselist[-1])
+            print(filepath)
 def saveas():
     global filepath
-    global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
     file = tkf.asksaveasfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'w') as newfile:
         newfile.write(retrieve())
     filepath = newfile.name
-    app.settitle(filepath)
+    parseplist = str(filepath).split('/')
+    settitle(parseplist[-1])
 def openfile():
     global filepath
-    global app
     files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
     file = tkf.askopenfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'r') as thefilename:
         filepath = thefilename.name
         x = thefilename.read()
-        app.settitle(parselist[1])
+        parseplist = str(filepath).split('/')
+        settitle(parseplist[-1])
         textbox.delete(1.0, END)
         textbox.insert(INSERT, x)
 def new():
-    global app
-    app.settitle("NewFile")
+    global filepath
+    filepath = ""
+    settitle("NewFile")
     textbox.delete(1.0, END)
 def copy(event=None):
     root.clipboard_clear()
@@ -94,7 +102,7 @@ def findreplace():
 def findreplacebox():
     global searchrbox
     global replacebox
-    newbox = Toplevel(app)
+    newbox = Toplevel(root)
     newbox.title("Find and Replace")
     newbox.resizable(False, False)
     searchrbox = Entry(newbox)
@@ -109,7 +117,7 @@ def findreplacebox():
     findreplacebutton.pack(side=RIGHT)
 def findbox():
     global searchbox
-    newbox = Toplevel(app)
+    newbox = Toplevel(root)
     newbox.title("")
     newbox.resizable(False, False)
     searchbox = Entry(newbox)
@@ -124,7 +132,7 @@ def aboutbox():
         if aboutwin.state() == "normal":
             aboutwin.focus()
     except:
-        aboutwin = Toplevel(app)
+        aboutwin = Toplevel(root)
         aboutwin.title("About")
         aboutwin.resizable(False, False)
         aboutwin.geometry("465x350")
@@ -180,7 +188,7 @@ def fontsizebox():
         if fontsizewin.state() == "normal":
             fontsizewin.focus()
     except:
-        newbox = Toplevel(app)
+        newbox = Toplevel(root)
         newbox.title("Size")
         newbox.resizable(False, False)
         sizebox = Entry(newbox)
@@ -198,25 +206,34 @@ def tab(arg):
     textbox.insert(INSERT, "    ")
     return 'break'
 def run():
+    parselist = str(filepath).split('/')
+    parseplist = str(parselist[-1].split('.'))
     if(filepath == ''):
-        errorbox = Toplevel(app)
-        errorbox.title("Error!")
-        errorbox.resizable(False, False)
-        error = Label(errorbox, text="No File Selected", fg="red")
-        error.configure(font=("Segoe UI", 12))
-        error.pack()
-        error.place(rely=1, relx=1, x=-190, y=-20, anchor=S)
-        errorbox.geometry("280x60")
-        okbutton = ttk.Button(errorbox, text = "Ok",  command = errorbox.destroy)
-        okbutton.pack()
-        okbutton.place(rely=1.0, relx=1.0, x=0, y=0, anchor=SE)
-        errorbox.focus()
+        msgbox.showerror('Error!', 'No File Selected')
+    elif(parseplist[-1] != "py"):
+        msgbox.showerror('Error!', 'File is not a python file')
     else:
         path = '"' + filepath + '"'
         os.system("start python " + path)
-
+        print(path)
+def typed(event):
+    parselist = root.title()[-1]
+    if(parselist == "*"):
+        return 
+    else:
+        root.title(root.title() + "*")
+def on_closing():
+    if(root.title()[-1] == "*"):
+        if msgbox.askquestion("File Not Saved", "Do you still want to quit?") == "yes":
+            root.destroy()
+        else:
+            return
+    else:
+        root.destroy()
 filepath = ""
 root = Tk()
+root.title("JDE: NewFile")
+root.configure(bg = 'gray25')
 menubar = Menu(root)
 
 filemenu = Menu(menubar, tearoff=0)
@@ -270,9 +287,13 @@ rightclickmenu.add_command(label="Redo", command =lambda : redoo())
 root.bind("<Button-3>", popup)
 root.bind("<Control-z>", undoo)
 root.bind("<Control-y>", redoo)
+root.bind("<Control-s>", save)
+root.bind("<Key>", typed)
 #root.bind("<Control-y>", lambda : fontsizeinc())
 root.config(menu=menubar)
-runbutton = Button(root, text = "Run", command = lambda : run())
+root.protocol("WM_DELETE_WINDOW", on_closing)
+runimage = PhotoImage(file = r"run.png")
+runbutton = Button(root, image = runimage, command = lambda : run())
 runbutton.pack()
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
@@ -291,6 +312,4 @@ textbox.configure(font=(defaultfont, fontsize))
 textbox.insert(END, "Click here to type\n")
 root.iconbitmap(default=icon)
 root.geometry(windowsize)
-app = window.Window(root)
-app.draw()
 root.mainloop()
