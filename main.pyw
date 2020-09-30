@@ -28,7 +28,7 @@ def save(event):
             print(filepath)
 def saveas():
     global filepath
-    files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
+    files = [('Python Files', '*.py *.pyw'), ('Text File', '*.txt'), ('All Files', '*.*')]
     file = tkf.asksaveasfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'w') as newfile:
@@ -38,16 +38,19 @@ def saveas():
     settitle(parseplist[-1])
 def openfile():
     global filepath
-    files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = tkf.askopenfile(filetypes = files, defaultextension = files)
-    parselist = str(file).split('\'')
-    with open(parselist[1],'r') as thefilename:
-        filepath = thefilename.name
-        x = thefilename.read()
-        parseplist = str(filepath).split('/')
-        settitle(parseplist[-1])
-        textbox.delete(1.0, END)
-        textbox.insert(INSERT, x)
+    try:
+        files = [('Python Files', '*.py *.pyw'), ('Text File', '*.txt'), ('All Files', '*.*')]
+        file = tkf.askopenfile(filetypes = files, defaultextension = files)
+        parselist = str(file).split('\'')
+        with open(parselist[1],'r') as thefilename:
+            filepath = thefilename.name
+            x = thefilename.read()
+            parseplist = str(filepath).split('/')
+            settitle(parseplist[-1])
+            textbox.delete(1.0, END)
+            textbox.insert(INSERT, x)
+    except:
+        print("No file selected")
 def new():
     global filepath
     filepath = ""
@@ -207,10 +210,10 @@ def tab(arg):
     return 'break'
 def run():
     parselist = str(filepath).split('/')
-    parseplist = str(parselist[-1].split('.'))
+    parseplist = parselist[-1].split('.')
     if(filepath == ''):
         msgbox.showerror('Error!', 'No File Selected')
-    elif(parseplist[-1] != "py"):
+    elif(parseplist[-1] != "py" and parseplist[-1] != "pyw"):
         msgbox.showerror('Error!', 'File is not a python file')
     else:
         path = '"' + filepath + '"'
