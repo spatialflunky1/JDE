@@ -49,6 +49,7 @@ def openfile():
             settitle(parseplist[-1])
             textbox.delete(1.0, END)
             textbox.insert(INSERT, x)
+            color(True)
     except:
         print("No file selected")
 def new():
@@ -233,6 +234,81 @@ def on_closing():
             return
     else:
         root.destroy()
+def color(event):
+    if "if ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("if ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("if "))
+            textbox.tag_add('xif', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xif', foreground = 'yellow')
+    if "elif ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("elif ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("elif "))
+            textbox.tag_add('xelif', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xelif', foreground = 'yellow')
+    if "else ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("else ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("else "))
+            textbox.tag_add('xelse', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xelse', foreground = 'yellow')
+    if "def ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("def ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("def "))
+            textbox.tag_add('xdef', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xdef', foreground = 'cyan')
+    if "import ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("import ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("import "))
+            textbox.tag_add('xim', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xim', foreground = 'magenta')
+    if "from ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("from ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("from "))
+            textbox.tag_add('xfr', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xfr', foreground = 'magenta')
+    if "in ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("in ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("in "))
+            textbox.tag_add('xin', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xin', foreground = 'magenta')
+    if "class ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("class ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("class "))
+            textbox.tag_add('xclass', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xclass', foreground = 'cyan')
+
+
 filepath = ""
 root = Tk()
 root.title("JDE: NewFile")
@@ -304,6 +380,7 @@ textbox.bind("<Tab>", tab)
 textbox.configure(bg = 'gray19', fg = 'white')
 textbox.configure(insertbackground='white')
 textbox.bind("<Key>", typed)
+textbox.bind("<Key>", color)
 scrollbar.pack(side=RIGHT, fill=Y)
 side_scrollbar.pack(side=BOTTOM, fill=X)
 textbox.pack(side=BOTTOM, fill=BOTH, expand=1)

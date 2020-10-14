@@ -1,1 +1,1 @@
-pythings = {}
+pythings = ["if", "def"]
