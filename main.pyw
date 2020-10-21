@@ -6,7 +6,6 @@ import time
 import tkinter.ttk as ttk
 from options import *
 import os
-from pytext import pythings
 
 interpreter = ''
 def settitle(title):
