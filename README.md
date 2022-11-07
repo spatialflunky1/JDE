@@ -5,7 +5,7 @@ Jake's Development Environment
 An Integrated Development Environment to code Python and others in the future.
 
 ## Version:
-Beta 0.1.2.5
+Beta 0.1.6
 
 ## How to Run
 #### Linux & macOS:
@@ -28,4 +28,3 @@ Make sure you are running python 3 with:
 ```
 python --version
 ```
-

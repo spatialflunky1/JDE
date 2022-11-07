@@ -1,45 +1,60 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import tkinter.filedialog as tkf
+import tkinter.messagebox as msgbox
 import time
-import window
 import tkinter.ttk as ttk
 from options import *
+import os
+
+interpreter = ''
+def settitle(title):
+    root.title("JDE" + ": " + title)
 def popup(event):
     rightclickmenu.tk_popup(event.x_root, event.y_root)
 def retrieve():
     input = textbox.get("1.0",END)
     return input
-def save():
+def save(event):
     global filepath
     if filepath == "":
         saveas()
     else:
         with open(filepath,'w') as newfile:
             newfile.write(retrieve())
+            parselist = str(filepath).split("/")
+            settitle(parselist[-1])
+            print(filepath)
 def saveas():
     global filepath
-    global app
-    files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
+    files = [('Python Files', '*.py *.pyw'), ('Text File', '*.txt'), ('All Files', '*.*')]
     file = tkf.asksaveasfile(filetypes = files, defaultextension = files)
     parselist = str(file).split('\'')
     with open(parselist[1],'w') as newfile:
         newfile.write(retrieve())
     filepath = newfile.name
-    app.settitle(filepath)
+    parseplist = str(filepath).split('/')
+    settitle(parseplist[-1])
 def openfile():
-    global app
-    files = [('Python Files', '*.py'), ('Text File', '*.txt'), ('All Files', '*.*')]
-    file = tkf.askopenfile(filetypes = files, defaultextension = files)
-    parselist = str(file).split('\'')
-    with open(parselist[1],'r') as thefilename:
-        x = thefilename.read()
-        app.settitle(parselist[1])
-        textbox.delete(1.0, END)
-        textbox.insert(INSERT, x)
+    global filepath
+    try:
+        files = [('Python Files', '*.py *.pyw'), ('Text File', '*.txt'), ('All Files', '*.*')]
+        file = tkf.askopenfile(filetypes = files, defaultextension = files)
+        parselist = str(file).split('\'')
+        with open(parselist[1],'r') as thefilename:
+            filepath = thefilename.name
+            x = thefilename.read()
+            parseplist = str(filepath).split('/')
+            settitle(parseplist[-1])
+            textbox.delete(1.0, END)
+            textbox.insert(INSERT, x)
+            color(True)
+    except:
+        print("No file selected")
 def new():
-    global app
-    app.settitle("NewFile")
+    global filepath
+    filepath = ""
+    settitle("NewFile")
     textbox.delete(1.0, END)
 def copy(event=None):
     root.clipboard_clear()
@@ -90,7 +105,8 @@ def findreplace():
 def findreplacebox():
     global searchrbox
     global replacebox
-    newbox = Toplevel(app)
+    newbox = Toplevel(root)
+    newbox.title("Find and Replace")
     newbox.resizable(False, False)
     searchrbox = Entry(newbox)
     searchrbox.pack(side=LEFT, fill=BOTH, expand=1)
@@ -104,7 +120,8 @@ def findreplacebox():
     findreplacebutton.pack(side=RIGHT)
 def findbox():
     global searchbox
-    newbox = Toplevel(app)
+    newbox = Toplevel(root)
+    newbox.title("")
     newbox.resizable(False, False)
     searchbox = Entry(newbox)
     searchbox.pack(side=LEFT, fill=BOTH, expand=1)
@@ -119,6 +136,7 @@ def aboutbox():
             aboutwin.focus()
     except:
         aboutwin = Toplevel(root)
+        aboutwin.title("About")
         aboutwin.resizable(False, False)
         aboutwin.geometry("465x350")
         nm = Label(aboutwin, text="JDE", fg='deep sky blue')
@@ -173,7 +191,8 @@ def fontsizebox():
         if fontsizewin.state() == "normal":
             fontsizewin.focus()
     except:
-        newbox = Toplevel(app)
+        newbox = Toplevel(root)
+        newbox.title("Size")
         newbox.resizable(False, False)
         sizebox = Entry(newbox)
         sizebox.pack(side=LEFT, fill=BOTH, expand=1)
@@ -189,9 +208,110 @@ def fontchange(font):
 def tab(arg):
     textbox.insert(INSERT, "    ")
     return 'break'
-# print(ui_manager.is_fullscreen)
+def run():
+    parselist = str(filepath).split('/')
+    parseplist = parselist[-1].split('.')
+    if(filepath == ''):
+        msgbox.showerror('Error!', 'No File Selected')
+    elif(parseplist[-1] != "py" and parseplist[-1] != "pyw"):
+        msgbox.showerror('Error!', 'File is not a python file')
+    else:
+        path = '"' + filepath + '"'
+        os.system("start python " + path)
+        print(path)
+def typed(event):
+    parselist = root.title()[-1]
+    if(parselist == "*"):
+        return 
+    else:
+        root.title(root.title() + "*")
+def on_closing():
+    if(root.title()[-1] == "*"):
+        if msgbox.askquestion("File Not Saved", "Do you still want to quit?") == "yes":
+            root.destroy()
+        else:
+            return
+    else:
+        root.destroy()
+def color(event):
+    if "if ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("if ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("if "))
+            textbox.tag_add('xif', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xif', foreground = 'yellow')
+    if "elif ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("elif ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("elif "))
+            textbox.tag_add('xelif', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xelif', foreground = 'yellow')
+    if "else ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("else ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("else "))
+            textbox.tag_add('xelse', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xelse', foreground = 'yellow')
+    if "def ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("def ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("def "))
+            textbox.tag_add('xdef', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xdef', foreground = 'cyan')
+    if "import ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("import ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("import "))
+            textbox.tag_add('xim', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xim', foreground = 'magenta')
+    if "from ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("from ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("from "))
+            textbox.tag_add('xfr', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xfr', foreground = 'magenta')
+    if "in ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("in ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("in "))
+            textbox.tag_add('xin', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xin', foreground = 'magenta')
+    if "class ":
+        idx = '1.0'
+        while 1:
+            idx = textbox.search("class ", idx, nocase=1, stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len("class "))
+            textbox.tag_add('xclass', idx, lastidx)
+            idx = lastidx
+            textbox.tag_config('xclass', foreground = 'cyan')
+
+
 filepath = ""
 root = Tk()
+root.title("JDE: NewFile")
+root.configure(bg = 'gray25')
 menubar = Menu(root)
 
 filemenu = Menu(menubar, tearoff=0)
@@ -245,14 +365,21 @@ rightclickmenu.add_command(label="Redo", command =lambda : redoo())
 root.bind("<Button-3>", popup)
 root.bind("<Control-z>", undoo)
 root.bind("<Control-y>", redoo)
+root.bind("<Control-s>", save)
 #root.bind("<Control-y>", lambda : fontsizeinc())
 root.config(menu=menubar)
+root.protocol("WM_DELETE_WINDOW", on_closing)
+runimage = PhotoImage(file = r"run.png")
+runbutton = Button(root, image = runimage, command = lambda : run())
+runbutton.pack()
 scrollbar = Scrollbar(root)
 side_scrollbar = Scrollbar(root, orient="horizontal")
 textbox = Text(root, undo=True)
 textbox.bind("<Tab>", tab)
 textbox.configure(bg = 'gray19', fg = 'white')
 textbox.configure(insertbackground='white')
+textbox.bind("<Key>", typed)
+textbox.bind("<Key>", color)
 scrollbar.pack(side=RIGHT, fill=Y)
 side_scrollbar.pack(side=BOTTOM, fill=X)
 textbox.pack(side=BOTTOM, fill=BOTH, expand=1)
@@ -264,6 +391,4 @@ textbox.configure(font=(defaultfont, fontsize))
 textbox.insert(END, "Click here to type\n")
 root.iconbitmap(default=icon)
 root.geometry(windowsize)
-app = window.Window(root)
-app.draw()
 root.mainloop()
